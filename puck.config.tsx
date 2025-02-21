@@ -9,31 +9,34 @@ export const config: Config = {
           label: "Form Title",
         },
         formFields: { 
-          type: "array",   // ✅ Allows users to add fields dynamically
+          type: "array",
           label: "Form Fields",
-          of: {   // ✅ Use `of` instead of `items`
-            type: "object",
-            label: "Field",
-            fields: {
-              label: { 
-                type: "text", 
-                label: "Field Label", 
-              },
-              type: {
-                type: "select",
-                label: "Field Type",
-                options: ["text", "email", "radio", "checkbox", "textarea"],  // ✅ Field type options
-              },
+          defaultValue: [], // Add this to ensure the array is initialized
+          arrayFields: {    // Change from itemType to arrayFields
+            label: { 
+              type: "text", 
+              label: "Field Label", 
+            },
+            fieldType: {    // Changed from 'type' to 'fieldType' to avoid confusion
+              type: "select",
+              label: "Field Type",
+              options: [
+                { label: "Text Input", value: "text" },
+                { label: "Email Input", value: "email" },
+                { label: "Radio Button", value: "radio" },
+                { label: "Checkbox", value: "checkbox" },
+                { label: "Textarea", value: "textarea" }
+              ],
             },
           },
         },
       },
-    
+      
       defaultProps: {
         title: "Form",
         formFields: [
-          { label: "Name", type: "text" },
-          { label: "Email", type: "email" },
+          { label: "Name", fieldType: "text" },
+          { label: "Email", fieldType: "email" },
         ],
       },
     
@@ -44,11 +47,11 @@ export const config: Config = {
             {formFields?.map((field, index) => (
               <div key={index} style={{ marginBottom: "10px" }}>
                 <label>{field.label}</label>
-                {field.type === "text" && <input type="text" placeholder={field.label} />}
-                {field.type === "email" && <input type="email" placeholder={field.label} />}
-                {field.type === "radio" && <input type="radio" />}
-                {field.type === "checkbox" && <input type="checkbox" />}
-                {field.type === "textarea" && <textarea placeholder={field.label} />}
+                {field.fieldType === "text" && <input type="text" placeholder={field.label} />}
+                {field.fieldType === "email" && <input type="email" placeholder={field.label} />}
+                {field.fieldType === "radio" && <input type="radio" />}
+                {field.fieldType === "checkbox" && <input type="checkbox" />}
+                {field.fieldType === "textarea" && <textarea placeholder={field.label} />}
               </div>
             ))}
           </form>
@@ -59,3 +62,7 @@ export const config: Config = {
 };
 
 export default config;
+export const rootTemplate = {
+  zones: ["content"],
+  components: ["FormBlock"]  // Make sure FormBlock is listed here
+};
